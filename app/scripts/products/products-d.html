@@ -1,0 +1,17 @@
+<div class="products">
+    <h2>Products</h2>
+    <hr/>
+    <h3>Add Products</h3>
+    <form name="addProduct" ng-submit="data.methods.add('products', newProduct)">
+        <input type="text" ng-model="newProduct.name" placeholder="name"/>
+        <input type="number" ng-model="newProduct.supply" placeholder="supply available"/>
+        <input type="file" ng-model="newProduct.image" placeholder="supply available"/>
+        <input type="price" ng-model="newProduct.price" placeholder="price"/>
+        <input type="area" ng-model="newProduct.area" placeholder="area"/>
+        <button type="submit">Add Product</button>
+    </form>
+    <h3>Edit Products</h3>
+    <div ng-repeat="product in data.data.users[data.auth.uid].public.products">
+        {{product}}
+    </div>
+</div>

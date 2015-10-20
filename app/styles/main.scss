@@ -35,7 +35,19 @@ IMPORTANT NOTE:
 
 @import  'base/_typography.scss';
 
+@import  '../scripts/coin/_coin-d.scss';
+
+@import  '../scripts/delivery/_delivery-d.scss';
+
+@import  '../scripts/dna/_dna-d.scss';
+
+@import  '../scripts/products/_products-d.scss';
+
+@import  '../scripts/reviews/_reviews-d.scss';
+
 @import  '../scripts/scannabis/_scannabis-d.scss';
+
+@import  '../scripts/shop/_shop-d.scss';
 
 @import  '../scripts/users/_users-d.scss';
 

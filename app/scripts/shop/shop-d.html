@@ -1,0 +1,22 @@
+<div class="shop">
+    <h2>Shop</h2>
+    <hr/>
+    <h3>Catalog</h3>
+    <div ng-repeat="user in data.data.users">
+        <div ng-repeat="product in user.public.products">
+            <form name="buyProduct" ng-submit="data.methods.add('orders', product)">
+                <h2>{{product.name}} ${{product.price}}</h2>
+                <input type="number" ng-model="product.qty" placeholder="qty"/>
+                <button type="submit">Buy</button>
+            </form>
+        </div>
+    </div>
+    <h3>Cart</h3>
+    <div ng-repeat="(key, product) in data.data.users[data.auth.uid].public.orders">
+        <form name="deliver" ng-submit="data.methods.add('delivery', product); data.methods.remove('delivery', key);">
+            {{product.name}}
+            <input type="number" ng-model="product.qty" placeholder="qty" required/>
+            <button>Deliver</button>
+        </form>
+    </div>
+</div>

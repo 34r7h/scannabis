@@ -12,7 +12,7 @@ angular.module('scannabis')
     .factory('Data', function ($firebaseObject, $firebaseArray, $firebaseAuth)
     {
         'use strict';
-        var service = {methods:{}, data:{}};
+        var service = {methods:{}, data:{}, auth:{}};
         // INITIALIZATION
 
         // ACTUAL DEFINITION
@@ -24,7 +24,8 @@ angular.module('scannabis')
                 if (authData) {
                     $firebaseArray(usersRef).$loaded().then(function(data){
                         service.data.users = data.$getRecord('users');
-                        console.log("Logged in as:", authData.uid);})
+                        service.auth = authData;
+                    });
                 } else {
                     console.log("Logged out");
                 }
@@ -74,13 +75,27 @@ angular.module('scannabis')
             },
             save:function(type, key, data){
                 var saveRef = fbRef + type + '/' + key;
-                console.log(saveRef);
                 var newFb = new fb(saveRef);
                 var obj = $firebaseObject(newFb);
-                console.log(obj);
                 obj.$value = data;
                 obj.$save();
+            },
+            add:function(ref, data, social){
+                 service.methods.getData();
+                if (social !== null) {
+                    var addRef = fbRef + 'users/'+ service.auth.uid +'/public/' +ref;
+                } else {
+                    var addRef = fbRef + 'users/'+ social +'/public/' +ref;
+                }
+                 var addRef = fbRef + 'users/'+ service.auth.uid +'/public/' +ref;
+                 var addFb = new fb(addRef);
+                 var arr = $firebaseArray(addFb);
+                 arr.$add(data).then(function(){
+                     service.methods.getData();
+                 });
             }
+
+
         };
         service.methods.getData();
         return service;
