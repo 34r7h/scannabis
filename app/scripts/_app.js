@@ -14,5 +14,6 @@ angular.module('scannabis', [
     'ngResource',
     'ngTouch',
     'ui.router',
-    'firebase'
+    'firebase',
+  'uploader'
   ]);

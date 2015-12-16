@@ -10,7 +10,7 @@ angular.module('scannabis')
 .directive('auth', function ()
 {
     return {
-        templateUrl: 'scripts/auth/auth-d.html',
+        templateUrl: 'scripts/directives/auth/auth-d.html',
         restrict: 'EA'
 
     };

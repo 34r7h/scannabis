@@ -2,15 +2,15 @@
 
 /**
 * @ngdoc directive
-* @name scannabis.directive:coin
+* @name scannabis.directive:news
 * @description
-* # coin
+* # news
 */
 angular.module('scannabis')
-.directive('coin', function ()
+.directive('news', function ()
 {
     return {
-        templateUrl: 'scripts/coin/coin-d.html',
+        templateUrl: 'scripts/directives/news/news-d.html',
         
         restrict: 'EA',
         scope: {

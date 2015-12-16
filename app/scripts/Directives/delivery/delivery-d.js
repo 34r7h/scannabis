@@ -10,7 +10,7 @@ angular.module('scannabis')
 .directive('delivery', function ()
 {
     return {
-        templateUrl: 'scripts/delivery/delivery-d.html',
+        templateUrl: 'scripts/directives/delivery/delivery-d.html',
         restrict: 'EA'
     };
 });

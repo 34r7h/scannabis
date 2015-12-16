@@ -2,15 +2,15 @@
 
 /**
 * @ngdoc directive
-* @name scannabis.directive:scannabis
+* @name scannabis.directive:coin
 * @description
-* # scannabis
+* # coin
 */
 angular.module('scannabis')
-.directive('scannabis', function (Data)
+.directive('coin', function ()
 {
     return {
-        templateUrl: 'scripts/scannabis/scannabis-d.html',
+        templateUrl: 'scripts/directives/coin/coin-d.html',
         
         restrict: 'EA',
         scope: {
@@ -22,8 +22,7 @@ angular.module('scannabis')
         },
         controller: function ($scope)
         {
-            $scope.data = Data;
-            // love :)
+
         }
     };
 });

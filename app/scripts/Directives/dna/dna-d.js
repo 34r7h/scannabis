@@ -2,15 +2,15 @@
 
 /**
 * @ngdoc directive
-* @name scannabis.directive:shop
+* @name scannabis.directive:dna
 * @description
-* # shop
+* # dna
 */
 angular.module('scannabis')
-.directive('shop', function ()
+.directive('dna', function ()
 {
     return {
-        templateUrl: 'scripts/shop/shop-d.html',
+        templateUrl: 'scripts/directives/dna/dna-d.html',
         restrict: 'EA'
     };
 });
