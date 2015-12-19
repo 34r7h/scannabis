@@ -9,7 +9,7 @@ var fb = Firebase;
 var fbRef = 'https://scannabis.firebaseio.com/';
 
 angular.module('scannabis')
-    .factory('Data', function ($firebaseObject, $firebaseArray, $firebaseAuth)
+    .factory('Data', function ($firebaseObject, $firebaseArray, $firebaseAuth, $sce)
     {
         'use strict';
         var service = {methods:{}, data:{}, auth:{}};
@@ -17,6 +17,9 @@ angular.module('scannabis')
 
         // ACTUAL DEFINITION
         service.methods = {
+            sanitize: function (data) {
+                return $sce.trustAsResourceUrl(data);
+            },
             getData: function(){
                 var usersRef = new fb(fbRef);
                 var auth = $firebaseAuth(usersRef);
@@ -31,6 +34,7 @@ angular.module('scannabis')
                 }
             },
             login: function(obj){
+                console.log('logging in', obj);
                 var authRef = new fb(fbRef);
                 var authObj = $firebaseAuth(authRef);
                 authObj.$authWithPassword({
@@ -82,17 +86,30 @@ angular.module('scannabis')
             },
             add:function(ref, data, social){
                  service.methods.getData();
-                if (social !== null) {
+                var addRef = !social ? fbRef + 'users/'+ service.auth.uid +'/public/' +ref :
+                fbRef + social +'/' +ref;
+
+
+
+                /*if (social !== null) {
                     var addRef = fbRef + 'users/'+ service.auth.uid +'/public/' +ref;
                 } else {
                     var addRef = fbRef + 'users/'+ social +'/public/' +ref;
-                }
-                 var addRef = fbRef + 'users/'+ service.auth.uid +'/public/' +ref;
+                }*/
+                 /*var addRef = fbRef + 'users/'+ service.auth.uid +'/public/' + ref;*/
+                console.log(addRef);
                  var addFb = new fb(addRef);
                  var arr = $firebaseArray(addFb);
                  arr.$add(data).then(function(){
                      service.methods.getData();
                  });
+            },
+            remove: function(type, ref){
+                var removeRef = fbRef + 'users/'+ service.auth.uid +'/public/' + type + '/' + ref;
+                console.log('removeRef',removeRef);
+                var removeFb = new fb(removeRef);
+                var obj = $firebaseObject(removeFb);
+                obj.$remove();
             }
 
 

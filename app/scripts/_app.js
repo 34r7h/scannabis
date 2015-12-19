@@ -9,11 +9,12 @@
 'use strict';
 
 angular.module('scannabis', [
-    'ngAnimate',
-    'ngAria',
-    'ngResource',
-    'ngTouch',
-    'ui.router',
-    'firebase',
-  'uploader'
-  ]);
+	'ngAnimate',
+	'ngAria',
+	'ngResource',
+	'ngTouch',
+	'ui.router',
+	'ngSanitize',
+	'firebase',
+	'uploader'
+]);

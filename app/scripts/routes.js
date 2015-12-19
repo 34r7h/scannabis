@@ -8,8 +8,9 @@
  */
 
 angular.module('scannabis')
-	.config(function ($stateProvider, $urlRouterProvider) {
+	.config(function ($stateProvider, $urlRouterProvider, $compileProvider) {
 		'use strict';
+		$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob):|data:image\//);
 		$stateProvider
 			.state('scannabis.test', {
 				url: 'test',
@@ -17,14 +18,19 @@ angular.module('scannabis')
 			})
 			.state('scannabis', {
 				url: '/',
-				template: '<ul style="display: flex; width:100%"><li style="flex: 1 1 100px"><a ui-sref="scannabis.delivery">Delivery</a></li><li style="flex: 1 1 100px"><a ui-sref="scannabis.market">Market</a></li><li style="flex: 1 1 100px"><a ui-sref="scannabis.pos">POS</a></li><li style="flex: 1 1 100px"><a ui-sref="scannabis.strains">Strains</a></li></ul><ui-view></ui-view><ul style="display: flex; width:100%"><li style="flex: 1 1 100px"><a ui-sref="scannabis.news">News</a></li><li style="flex: 1 1 100px"><a ui-sref="scannabis.auth">auth</a></li><li style="flex: 1 1 100px"><a ui-sref="scannabis.coin">coin</a></li><li style="flex: 1 1 100px"><a ui-sref="scannabis.users">Users</a></li></ul>',
-				controller: function ($scope, Data) {
+				template: '<scannabis></scannabis>',
+				controller: function ($scope, Data, $state) {
 					$scope.data = Data;
+					$scope.state = $state;
 				}
 			})
 			.state('scannabis.market', {
 				url: 'market',
-				template: '<shop></shop><reviews></reviews>'
+				template: '<ui-view></ui-view><shop></shop><reviews></reviews>'
+			})
+			.state('scannabis.market.product', {
+				url: '/:user/:product',
+				template: '<product></product><reviews></reviews>'
 			})
 			.state('scannabis.auth', {
 				url: 'auth',

@@ -7,19 +7,10 @@
 * # scannabis
 */
 angular.module('scannabis')
-.directive('scannabis', function (Data)
+.directive('scannabis', function ()
 {
     return {
         templateUrl: 'scripts/directives/scannabis/scannabis-d.html',
-        
-        restrict: 'EA',
-        scope: {
-
-        },
-        controller: function ($scope)
-        {
-            $scope.data = Data;
-            // love :)
-        }
+        restrict: 'EA'
     };
 });
