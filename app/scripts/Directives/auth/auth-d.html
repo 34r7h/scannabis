@@ -5,7 +5,7 @@
         <form name="login" ng-submit="data.methods.login(auth.login)">
             <input type="email" ng-model="auth.login.email" placeholder="email"/>
             <input type="password" ng-model="auth.login.pass" placeholder="password"/>
-            <button type="submit"></button>
+            <button type="submit">Sign in</button>
 
         </form>
     </div>
@@ -15,8 +15,10 @@
         <form name="register" ng-submit="data.methods.register(auth.register)">
             <input type="email" ng-model="auth.register.email" placeholder="email"/>
             <input type="password" ng-model="auth.register.pass" placeholder="password"/>
-            <div ng-repeat="type in ['consumer', 'producer', 'seller']"><a ng-click="auth.register.userType = type" href="">{{type}}</a></div>
-            <button type="submit"></button>
+            <div ng-repeat="type in ['consumer', 'producer', 'seller']">
+                <a ng-click="auth.register.userType = type" href="">{{type}}</a>
+            </div>
+            <button type="submit">Register</button>
         </form>
     </div>
     <div>

@@ -1,0 +1,8 @@
+<div class="product">
+Jah
+    {{state.params}}
+    {{data.data.users[state.params.user].public.products[state.params.product]}}
+    <h1>{{data.data.users[state.params.user].public.products[state.params.product].name}}</h1>
+    <img width="100%" ng-src="data:image/jpg;base64,{{data.data.users[state.params.user].public.products[state.params.product].media[0]['1000']}}" alt="">
+
+</div>
