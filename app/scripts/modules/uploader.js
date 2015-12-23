@@ -118,7 +118,7 @@ uploader.directive('uploader', function (AWSControl, $rootScope, $sce) {
 	return {
 		replace: true,
 		scope: {},
-		template: '<form novalidate ><input class="well" type="file" multiple="multiple" id="yourInput" /><button class="btn btn-behance" id="upIt" data-ng-click="upload()">Upload</button></form>',
+		template: '<form name="uploading" novalidate><input class="well" type="file" multiple="multiple" id="yourInput" ng-blur="upload()"/><!--<button class="btn btn-behance" id="upIt" data-ng-click="upload()">Upload</button>--></form>',
 		restrict: 'E',
 		link: function (scope, elem) {
 			scope.upload = function () {
@@ -147,9 +147,9 @@ uploader.directive('uploader', function (AWSControl, $rootScope, $sce) {
 									canvas.width = size;
 									canvas.height = img.height / x;
 									ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-									$rootScope.media[fileName][size] = canvas.toDataURL().toString();
+									$rootScope.media[fileName][size] = canvas.toDataURL();
 								});
-								$rootScope.media[fileName].full = e.target.result;
+								$rootScope.media[fileName].full = img.src;
 							}
 						})(file);
 					})

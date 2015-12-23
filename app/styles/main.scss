@@ -41,7 +41,13 @@ IMPORTANT NOTE:
 
 @import  '../scripts/directives/dna/_dna-d.scss';
 
+@import  '../scripts/directives/job/_job-d.scss';
+
+@import  '../scripts/directives/jobs/_jobs-d.scss';
+
 @import  '../scripts/directives/news/_news-d.scss';
+
+@import  '../scripts/directives/product/_product-d.scss';
 
 @import  '../scripts/directives/products/_products-d.scss';
 
@@ -52,7 +58,5 @@ IMPORTANT NOTE:
 @import  '../scripts/directives/shop/_shop-d.scss';
 
 @import  '../scripts/directives/users/_users-d.scss';
-
-@import  '../scripts/directives/product/_product-d.scss';
 
 // endinject

@@ -28,6 +28,12 @@ angular.module('scannabis')
 				url: 'market',
 				template: '<ui-view></ui-view><shop></shop><reviews></reviews>'
 			})
+			.state('scannabis.market.location', {
+				url: '/:location'
+			})
+			.state('scannabis.market.location.shop', {
+				url: '/:shop'
+			})
 			.state('scannabis.market.product', {
 				url: '/:user/:product',
 				template: '<product></product><reviews></reviews>'
@@ -59,6 +65,18 @@ angular.module('scannabis')
 			.state('scannabis.coin', {
 				url: 'coins',
 				template: '<coin></coin>'
+			})
+			.state('scannabis.jobs', {
+				url: 'jobs',
+				template: '<jobs></jobs>'
+			})
+			.state('scannabis.jobs.job', {
+				url: '/:job',
+				template: '<job></job>'
+			})
+			.state('scannabis.jobs.hires', {
+				url: 'jobs',
+				template: '<jobs></jobs>'
 			});
 		$urlRouterProvider.otherwise('/');
 			/* STATES-NEEDLE - DO NOT REMOVE THIS */;

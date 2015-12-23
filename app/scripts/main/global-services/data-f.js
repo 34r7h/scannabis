@@ -7,9 +7,10 @@
  */
 var fb = Firebase;
 var fbRef = 'https://scannabis.firebaseio.com/';
+var localForage = localforage;
 
 angular.module('scannabis')
-    .factory('Data', function ($firebaseObject, $firebaseArray, $firebaseAuth, $sce)
+    .factory('Data', function ($firebaseObject, $firebaseArray, $firebaseAuth, $sce, $window, $state)
     {
         'use strict';
         var service = {methods:{}, data:{}, auth:{}};
@@ -23,15 +24,50 @@ angular.module('scannabis')
             getData: function(){
                 var usersRef = new fb(fbRef);
                 var auth = $firebaseAuth(usersRef);
-                var authData = auth.$getAuth();
-                if (authData) {
-                    $firebaseArray(usersRef).$loaded().then(function(data){
-                        service.data.users = data.$getRecord('users');
-                        service.auth = authData;
-                    });
-                } else {
-                    console.log("Logged out");
-                }
+                localForage.getItem('auth', function (err, value) {
+                    if (value) {
+                        console.log(value, err);
+                        service.auth = value;
+                        $state.go('scannabis.market');
+                    }
+                });
+                localForage.getItem('data', function (err, value) {
+                    if (value) {
+                        console.log(value);
+                        service.data = value;
+                        var authData = auth.$getAuth();
+                        if (authData) {
+                            console.log(value);
+                            $firebaseArray(usersRef).$loaded().then(function(data){
+                                console.log(data);
+                                service.data.users = data.$getRecord('users');
+                                console.log(service.data.users);
+                                service.auth = authData;
+                                localForage.setItem('data', service.data);
+                                localForage.setItem('auth', service.auth);
+                                // TODO Check diff for data sync.
+                            });
+                        } else {
+                            console.log("Logged out");
+                        }
+                    } else {
+                        var authData = auth.$getAuth();
+                        if (authData) {
+                            $firebaseArray(usersRef).$loaded().then(function(data){
+                                service.data.users = data.$getRecord('users');
+                                service.auth = authData;
+                                localForage.setItem('data', service.data);
+                                localForage.setItem('auth', service.auth);
+                                // TODO Check diff for data sync.
+                            });
+                        } else {
+                            console.log("Logged out");
+                        }
+                    }
+                });
+
+
+
             },
             login: function(obj){
                 console.log('logging in', obj);
@@ -40,7 +76,7 @@ angular.module('scannabis')
                 authObj.$authWithPassword({
                     email: obj.email,
                     password: obj.pass
-                }).then(function(authData) {
+                }).then(function() {
                     service.methods.getData();
                 }).catch(function(error) {
                     console.error("Authentication failed:", error);
@@ -75,9 +111,12 @@ angular.module('scannabis')
                 var authObj = $firebaseAuth(authRef);
                 authObj.$unauth();
                 service.data.users = {};
+                service.auth = {};
+                $window.localForage.clear();
 
             },
             save:function(type, key, data){
+                console.log('saving data');
                 var saveRef = fbRef + type + '/' + key;
                 var newFb = new fb(saveRef);
                 var obj = $firebaseObject(newFb);
