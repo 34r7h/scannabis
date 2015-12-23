@@ -2,9 +2,11 @@
     <h2>Shop</h2>
     <hr/>
     <h3>Catalog</h3>
-    <div ng-repeat="(userKey, user) in data.data.users">
+    <div ng-repeat="(userKey, user) in data.data.users" ng-if="user.address.city === 'victoria' && user.userType === 'provider'">
         <div ng-repeat="(productKey, product) in user.public.products">
-            <a ui-sref="scannabis.market.product({user:userKey, product: productKey})"><img ng-repeat="img in product.media" ng-src="{{img[100]}}" alt=""></a>
+            <a ui-sref="scannabis.market.product({user:userKey, product: productKey})">
+                <div style="display: flex; flex-grow: 0"><img ng-src="{{product.media[0].full}}" ng-style="{flex:'1 1 10px', height:'initial', maxHeight:'200px'}" alt=""></div>
+            </a>
             <form name="buyProduct" ng-submit="data.methods.add('orders', product)">
                 <h2>{{product.name}} ${{product.price}}</h2>
                 <input type="number" ng-model="product.qty" placeholder="qty"/>

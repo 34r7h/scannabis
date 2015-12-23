@@ -2,23 +2,27 @@
     <h2>Products</h2>
     <hr/>
     <h3>Add Products</h3>
-    <form name="addProduct" ng-submit="newProduct.media = $root.media; data.methods.add('products', newProduct); newProduct = {}; $root.media = {}">
+    <form name="addProduct"
+          ng-submit="newProduct.media = $root.media; data.methods.add('products', newProduct); newProduct = {}; $root.media = {}">
         <input type="text" ng-model="newProduct.name" placeholder="name"/>
         <input type="number" ng-model="newProduct.supply" placeholder="supply available"/>
         <input type="number" ng-model="newProduct.price" placeholder="price"/>
         <input type="text" ng-model="newProduct.area" placeholder="area"/>
         <uploader></uploader>
         <button type="submit">Add Product</button>
-        <div ng-repeat="(imgKey, img) in $root.media">
-            <img ng-src="{{img.full}}" alt="">
-            <a ng-click="$parent.$root.media.splice(img,1)">Remove</a>
+        <div ng-style="{display: 'flex'}">
+            <div ng-repeat="(imgKey, img) in $root.media">
+                <img ng-src="{{img.full}}" alt="" ng-style="{width: '20%'}">
+                <a ng-click="$parent.$root.media.splice(img,1)">Remove</a>
+            </div>
         </div>
     </form>
     <h3>Edit Products</h3>
     <div ng-repeat="(key, product) in data.data.users[data.auth.uid].public.products">
         <h4>{{product.name}}</h4>
-        <img ng-repeat="img in product.media" ng-src="{{img['100']}}" alt=""> {{product.price | currency}}
-        <a href="" ng-click="data.data.users[data.auth.uid].public.products[key].$remove(); data.methods.remove('products', key)">Remove</a>
+        <img ng-repeat="img in product.media" ng-src="{{img.full}}" alt=""> {{product.price | currency}}
+        <a href=""
+           ng-click="data.data.users[data.auth.uid].public.products[key].$remove(); data.methods.remove('products', key)">Remove</a>
         <div><b>{{key}}:</b> {{product}}</div>
 
     </div>
