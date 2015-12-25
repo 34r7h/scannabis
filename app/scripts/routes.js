@@ -22,6 +22,7 @@ angular.module('scannabis')
 				controller: function ($scope, Data, $state) {
 					$scope.data = Data;
 					$scope.state = $state;
+					$scope.local = Data.local;
 				}
 			})
 			.state('scannabis.market', {

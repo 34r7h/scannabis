@@ -1,5 +1,6 @@
 var uploader = angular.module('uploader', ['ngSanitize'])
 	.config(function ($compileProvider) {
+		// sanitizer for canvas image manipulations
 		$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob):|data:image\//);
 	});
 
@@ -137,7 +138,7 @@ uploader.directive('uploader', function (AWSControl, $rootScope, $sce) {
 								console.log('-- RESULT', e.target.result, '-- NAME:', file.name);
 								var img = new Image();
 								img.src = e.target.result;
-								console.log('img.src', img.src);
+								/*console.log('img.src', img.src);
 								var canvas = document.createElement('canvas'),
 									ctx = canvas.getContext('2d'),
 									sizes = [100, 600, 1000];
@@ -148,7 +149,7 @@ uploader.directive('uploader', function (AWSControl, $rootScope, $sce) {
 									canvas.height = img.height / x;
 									ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 									$rootScope.media[fileName][size] = canvas.toDataURL();
-								});
+								});*/
 								$rootScope.media[fileName].full = img.src;
 							}
 						})(file);

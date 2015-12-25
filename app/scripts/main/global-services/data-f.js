@@ -5,43 +5,87 @@
  * # Data
  * Factory in the scannabis.
  */
+var online = navigator.onLine;
+var perf = performance.now();
+var now = new Date();
+console.info('javascript initiated at: ' + now, perf, online);
 var fb = Firebase;
 var fbRef = 'https://scannabis.firebaseio.com/';
 var localForage = localforage;
+var products = {};
+var fbDb = new fb(fbRef);
+var db = {
+    users: fbDb.child('users')
+};
 
 angular.module('scannabis')
     .factory('Data', function ($firebaseObject, $firebaseArray, $firebaseAuth, $sce, $window, $state)
     {
         'use strict';
-        var service = {methods:{}, data:{}, auth:{}};
+        console.info('service initiated at: ' + now, performance.now() - perf);
+        var service = {methods:{}, data:{}, auth:{}, test:{}, local:{}};
         // INITIALIZATION
-
+        localForage.getItem('products', function (err, value){console.log(value, performance.now( ) - perf); service.data.products = value; $state.reload();
+        });
+        localForage.getItem('my-products', function (err, value){
+            service.data.myProducts = value;
+            $state.reload();
+        });
+        localForage.getItem('auth', function (err, value){
+            service.data.auth = value;
+            $state.reload();
+            service.auth = $firebaseAuth(fbDb).$getAuth();
+        });
         // ACTUAL DEFINITION
         service.methods = {
             sanitize: function (data) {
                 return $sce.trustAsResourceUrl(data);
             },
             getData: function(){
-                var usersRef = new fb(fbRef);
-                var auth = $firebaseAuth(usersRef);
-                localForage.getItem('auth', function (err, value) {
+                console.info('getData() fired.', performance.now() - perf);
+                service.test.users = $firebaseObject(db.users);
+                service.test.users.$loaded().then(function (users) {
+                    service.test.products = [];
+                    service.test.myProducts = [];
+                    angular.forEach(users, function (user, userKey) {
+                        angular.forEach(user.public.products, function (product, productKey) {
+                            product.user = userKey;
+                            product.id = productKey;
+                            service.test.products.push(product);
+                            service.data.auth.uid === userKey ? service.test.myProducts.push(product) : null;
+
+                        });
+                    });
+                    service.data = service.test;
+                    localForage.setItem('products', service.test.products);
+                    localForage.setItem('my-products', service.test.myProducts);
+                });
+                // service.auth = $firebaseAuth(fbDb).$getAuth();
+                // var usersRef = new fb(fbRef);
+                // var auth = $firebaseAuth(usersRef);
+                /*localForage.getItem('auth', function (err, value) {
                     if (value) {
-                        console.log(value, err);
+                        console.log('localForage has auth', performance.now() - perf);
                         service.auth = value;
                         $state.go('scannabis.market');
                     }
-                });
+                });*/
+
+                /*
+
                 localForage.getItem('data', function (err, value) {
                     if (value) {
-                        console.log(value);
+                        console.log('localForage has data', performance.now() - perf);
                         service.data = value;
-                        var authData = auth.$getAuth();
-                        if (authData) {
-                            console.log(value);
+                        if (service.data.auth) {
+                            var perfFB = performance.now();
+                            console.log(value, perfFB);
                             $firebaseArray(usersRef).$loaded().then(function(data){
-                                console.log(data);
-                                service.data.users = data.$getRecord('users');
-                                console.log(service.data.users);
+                                console.log(data, performance.now());
+                                // service.data.users = data.$getRecord('users');
+                                service.data.users = db.users;
+                                console.log('service.data.users', service.data.users);
+                                var authData = auth.$getAuth();
                                 service.auth = authData;
                                 localForage.setItem('data', service.data);
                                 localForage.setItem('auth', service.auth);
@@ -65,19 +109,20 @@ angular.module('scannabis')
                         }
                     }
                 });
-
-
-
+                */
             },
             login: function(obj){
                 console.log('logging in', obj);
-                var authRef = new fb(fbRef);
-                var authObj = $firebaseAuth(authRef);
+                // var authRef = new fb(fbRef);
+                var authObj = $firebaseAuth(fbDb);
                 authObj.$authWithPassword({
                     email: obj.email,
                     password: obj.pass
-                }).then(function() {
+                }).then(function(auth) {
+                    service.auth = auth;
+                    localForage.setItem('auth', auth);
                     service.methods.getData();
+                    $state.go('scannabis.market');
                 }).catch(function(error) {
                     console.error("Authentication failed:", error);
                 });
@@ -120,7 +165,7 @@ angular.module('scannabis')
                 var saveRef = fbRef + type + '/' + key;
                 var newFb = new fb(saveRef);
                 var obj = $firebaseObject(newFb);
-                obj.$value = data;
+                obj.$value = angular.copy(data);
                 obj.$save();
             },
             add:function(ref, data, social){
@@ -154,5 +199,6 @@ angular.module('scannabis')
 
         };
         service.methods.getData();
+
         return service;
     });
