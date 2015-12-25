@@ -6,9 +6,6 @@
  * Factory in the scannabis.
  */
 var online = navigator.onLine;
-var perf = performance.now();
-var now = new Date();
-console.info('javascript initiated at: ' + now, perf, online);
 var fb = Firebase;
 var fbRef = 'https://scannabis.firebaseio.com/';
 var localForage = localforage;
@@ -22,10 +19,9 @@ angular.module('scannabis')
     .factory('Data', function ($firebaseObject, $firebaseArray, $firebaseAuth, $sce, $window, $state)
     {
         'use strict';
-        console.info('service initiated at: ' + now, performance.now() - perf);
         var service = {methods:{}, data:{}, auth:{}, test:{}, local:{}};
         // INITIALIZATION
-        localForage.getItem('products', function (err, value){console.log(value, performance.now( ) - perf); service.data.products = value; $state.reload();
+        localForage.getItem('products', function (err, value){ service.data.products = value; $state.reload();
         });
         localForage.getItem('my-products', function (err, value){
             service.data.myProducts = value;
@@ -42,7 +38,6 @@ angular.module('scannabis')
                 return $sce.trustAsResourceUrl(data);
             },
             getData: function(){
-                console.info('getData() fired.', performance.now() - perf);
                 service.test.users = $firebaseObject(db.users);
                 service.test.users.$loaded().then(function (users) {
                     service.test.products = [];
@@ -112,7 +107,6 @@ angular.module('scannabis')
                 */
             },
             login: function(obj){
-                console.log('logging in', obj);
                 // var authRef = new fb(fbRef);
                 var authObj = $firebaseAuth(fbDb);
                 authObj.$authWithPassword({
@@ -181,7 +175,6 @@ angular.module('scannabis')
                     var addRef = fbRef + 'users/'+ social +'/public/' +ref;
                 }*/
                  /*var addRef = fbRef + 'users/'+ service.auth.uid +'/public/' + ref;*/
-                console.log(addRef);
                  var addFb = new fb(addRef);
                  var arr = $firebaseArray(addFb);
                  arr.$add(data).then(function(){
