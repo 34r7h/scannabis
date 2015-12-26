@@ -1,9 +1,9 @@
 <div class="shop">
     <h3>Catalog</h3>
-    <div ng-repeat="product in $parent.data.data.products" style="background:rgba(255,255,255,.8); padding:1em; margin:1em; float: left">
+    <div ng-repeat="product in $parent.data.test.products" style="background:rgba(255,255,255,.8); padding:1em; margin:1em; float: left">
         <a ui-sref="scannabis.market.product({user:product.user, product: product.id})">
             <div ng-if="product.media">
-                <img ng-init="img.src=$parent.data.methods.getImage(product.media)" ng-src="{{img.src.$value}}" style="height:300px"></div>
+                <img ng-init="img.src=$parent.data.methods.getImage(product.media)" ng-src="{{img.src.$value || img.src}}" style="height:300px"></div>
         </a>
         <form name="buyProduct" ng-submit="data.methods.add('orders', product)">
             <h2>{{product.name}} ${{product.price}}</h2>

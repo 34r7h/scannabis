@@ -1,12 +1,11 @@
 <div class="products">
-    <br/>
     <h3 ng-click="show['addNewProduct'] =! show['addNewProduct']">
         <b ng-bind="show['addNewProduct'] ? '-' : '+'"> </b>
         Add New Product</h3>
     <form name="addProduct"
           ng-show="show['addNewProduct']"
           style="background: rgba(255,255,255, .8); padding:1em; margin:1em;"
-          ng-submit="newProduct.media = $root.media || null; data.methods.add('products', newProduct); newProduct = {}; $root.media = null">
+          ng-submit="newProduct.media = $root.media || null; data.methods.addNew('products', newProduct); newProduct = {}; $root.media = null">
 
         <h4 ng-click="show['productInfo'] =! show['productInfo']"><b ng-bind="show['productInfo'] ? '-' : '+'"> </b>
             Product Info</h4>
@@ -65,9 +64,9 @@
             <button type="button" ng-click="show.chooseImage = 'select'">Select from your image library</button>
             <button type="button" ng-click="show.chooseImage = 'upload'">Upload a new image</button>
             <div ng-if="show.chooseImage === 'select'">
-            <span ng-if="data.auth.uid" ng-repeat="(imageKey, image) in data.data.users[data.auth.uid].public.images">
+            <span ng-repeat="(imageKey, image) in $parent.data.test.users[data.auth.uid].public.images">
                 <img ng-click="$parent.$root.media = null; selected = 100; $root.media = image;"
-                     ng-init="img.src=data.methods.getImage(image)" ng-src="{{img.src.$value}}"
+                     ng-init="img.src=data.methods.getImage(image)" ng-src="{{img.src.$value || img.src}}"
                      style="max-height:{{selected || 40}}px; width: auto;">
             </span>
             </div>
@@ -77,7 +76,7 @@
             </div>
 
             <div ng-style="{display: 'flex'}" ng-if="$root.media">
-                <img ng-init="img.src = data.methods.getImage($root.media)" ng-src="{{img.src.$value}}"
+                <img ng-init="img.src = data.methods.getImage($root.media)" ng-src="{{img.src.$value || img.src}}"
                      ng-style="{width: 'auto', height:'200px'}">
                 <a ng-click="$root.media = null">Remove Image</a>
             </div>
@@ -86,14 +85,21 @@
 
     </form>
     <h3>Edit Products</h3>
-    <div ng-repeat="(key, product) in (data.data.myProducts || data.data.users[data.auth.uid].public.products)"
+    <!--<code ng-repeat="(productKey, product) in $parent.data.test.users[data.auth.uid].public.products"
+          ng-init="going = data.methods.getEntry('products', productKey)">
+        {{productKey}}
+        <input type="text" ng-model="going.name" ng-blur="data.methods.save('products', productKey, going)">
+        {{going}}
+    </code>-->
+    <div ng-repeat="(key, produkt) in $parent.data.test.users[data.auth.uid].public.products"
+         ng-init="product=$parent.data.methods.getEntry('products', key)"
          style="background:rgba(255,255,255, .8); padding:1em; margin:1em">
-        <b ng-click="show[product.name]=!show[product.name]">{{product.name}}</b>
-        <div ng-show="show[product.name]">
-            <form name="editProduct-{{product.id}}"
-                  ng-submit="data.methods.save('users/'+data.auth.uid+'/public/products', product.id, product); state.reload()">
+        <b ng-click="show['product.name']=!show['product.name']">{{product.name}}</b>
+        <div ng-show="show['product.name']">
+            <form name="editProduct-{{$index}}"
+                  ng-submit="data.methods.save('products', key, product); state.reload()">
                 <h4>Product Info</h4>
-                <input type="text" ng-model="product.name" placeholder="product name"/>
+                <input type="text" ng-model="product.name" placeholder="product name">
                 <br>
                 <textarea type="text" ng-model="product.desc" placeholder="product description"></textarea>
                 <div>
@@ -150,29 +156,34 @@
                 <button type="button" ng-click="changeImage = 'upload'">Upload a new image</button>
 
                 <div ng-if="changeImage === 'select'">
-                    <span ng-if="data.auth.uid"
-                          ng-repeat="(imageKey, image) in data.data.users[data.auth.uid].public.images">
+
+                    <span ng-repeat="(imageKey, image) in $parent.data.test.users[data.auth.uid].public.images">
+                        <img ng-click="product.media = null; selected = 100; product.media = image;"
+                             ng-init="img.src=data.methods.getImage(image)" ng-src="{{img.src.$value || img.src}}"
+                             style="max-height:{{selected || 40}}px; width: auto;">
+                    </span>
+
+                    <!--<span ng-if="data.auth.uid"
+                          ng-repeat="(imageKey, image) in data.test.users[data.auth.uid].public.images">
                         <img ng-click="product.media = null; selected = 100; product.media = image;"
                              ng-init="img.src=data.methods.getImage(image)" ng-src="{{img.src.$value}}"
                              style="max-height:{{selected || 40}}px; width: auto;">
-                    </span>
+                    </span>-->
                 </div>
 
                 <div ng-if="changeImage === 'upload'">
-                    <uploader name="{{product.id}}" pass="product"></uploader>
+                    <uploader name="{{key}}" pass="product"></uploader>
                 </div>
 
                 <div ng-style="{display: 'flex'}" ng-if="product.media">
-                    <img ng-init="img.src = data.methods.getImage(product.media)" ng-src="{{img.src.$value}}"
+                    <img ng-init="img.src = data.methods.getImage(product.media)" ng-src="{{img.src.$value || img.src}}"
                          ng-style="{width: 'auto', height:'200px'}">
                     <a ng-click="product.media = null">Remove Image</a>
                 </div>
 
                 <button type="submit">Save Product</button>
             </form>
-            <a ng-click="data.methods.remove('products', product.id);">Remove Product from System</a>
+            <a ng-click="data.methods.remove('products', key);">Remove Product from System</a>
         </div>
-
-
     </div>
 </div>
