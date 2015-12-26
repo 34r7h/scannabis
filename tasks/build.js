@@ -81,7 +81,7 @@ gulp.task('minFiles', function () {
     return gulp.src(config.mainFile)
         .pipe(assets)
         .pipe(gulpif('*.js', ngAnnotate()))
-        .pipe(gulpif('*.js', uglify()))
+        // .pipe(gulpif('*.js', uglify()))
         .pipe(gulpif('*.css', minifyCss()))
         .pipe(assets.restore())
         .pipe(useref())
