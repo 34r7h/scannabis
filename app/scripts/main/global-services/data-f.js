@@ -24,16 +24,20 @@ angular.module('scannabis')
 		// INITIALIZATION
 		localForage.getItem('products', function (err, value) {
 			service.test.products = value;
+			$state.reload();
 		});
 		localForage.getItem('images', function (err, value) {
 			service.test.images = value;
+			$state.reload();
 		});
 		localForage.getItem('users', function (err, value) {
 			service.test.users = value;
+			$state.reload();
 		});
 		localForage.getItem('auth', function (err, value) {
 			service.auth = value;
 			service.auth = $firebaseAuth(fbDb).$getAuth();
+			$state.reload();
 		});
 		// ACTUAL DEFINITION
 		service.methods = {

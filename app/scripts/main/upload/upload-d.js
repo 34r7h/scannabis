@@ -39,7 +39,7 @@ angular.module('scannabis')
 									var img = new Image();
 									img.src = e.target.result;
 									fbImagesArray.$add(img.src).then(function (ref) {
-										fbUserImagesObject[file.name.replace('.', '``')] = ref.key();
+										fbUserImagesObject[JSON.stringify(file.name.replace('.', '``'))] = ref.key();
 										fbUserImagesObject.$save();
 										console.log(ref.key());
 										!scope.pass ? $rootScope.media = ref.key() : scope.pass.media = ref.key();
