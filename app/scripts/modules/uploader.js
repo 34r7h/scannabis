@@ -12,7 +12,7 @@ uploader.provider('AWSControl', function () {
 	this.dataImg = '';
 
 
-	this.$get = function ($q, $rootScope, $firebase, $sce) {
+	this.$get = function ($q, $rootScope, $firebaseArray, $sce) {
 
 		return {
 			dataImg: this.dataImg,
@@ -114,22 +114,25 @@ uploader.provider('AWSControl', function () {
 
 });
 
-uploader.directive('uploader', function (AWSControl, $rootScope, $sce) {
+uploader.directive('uploader', function (AWSControl, $rootScope, $sce, $firebaseArray) {
 
 	return {
 		replace: true,
 		scope: {},
-		template: '<form name="uploading" novalidate><input class="well" type="file" multiple="multiple" id="yourInput" ng-blur="upload()"/><!--<button class="btn btn-behance" id="upIt" data-ng-click="upload()">Upload</button>--></form>',
+		template: '<form name="uploading" novalidate><input class="well" type="file" id="yourInput"/><button type="button" class="btn btn-behance" id="upIt" data-ng-click="upload()">Upload</button></form>',
 		restrict: 'E',
 		link: function (scope, elem) {
 			scope.upload = function () {
+				var fbImagesRef = 'https://scannabis.firebaseio.com/images';
+				var localForage = localforage;
+				var fbImages = new Firebase(fbImagesRef);
+				var fbImagesArray = $firebaseArray(fbImages);
 				var fileList = document.getElementById("yourInput").files;
 				console.log('files', fileList);
-				$rootScope.media = [];
 				angular.forEach(fileList,
-					function (file, fileKey) {
-						var fileName=fileKey;
-						$rootScope.media[fileName] = {};
+					function (file) {
+						// var fileName=fileKey;
+						// $rootScope.media[fileName] = {};
 						console.log('for each file', file);
 						scope.reader = new FileReader(file);
 						scope.reader.onload = (function (file) {
@@ -150,7 +153,11 @@ uploader.directive('uploader', function (AWSControl, $rootScope, $sce) {
 									ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 									$rootScope.media[fileName][size] = canvas.toDataURL();
 								});*/
-								$rootScope.media[fileName].full = img.src;
+								fbImagesArray.$add(img.src).then(function (ref) {
+									console.log(ref.key());
+									$rootScope.media = ref.key();
+									document.getElementById("yourInput").value = null;
+								});
 							}
 						})(file);
 					})

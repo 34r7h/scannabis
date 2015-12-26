@@ -15,6 +15,6 @@ angular.module('scannabis', [
 	'ngTouch',
 	'ui.router',
 	'ngSanitize',
-	'firebase',
-	'uploader'
+	'firebase'/*,
+	'uploader'*/
 ]);

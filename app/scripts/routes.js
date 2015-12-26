@@ -63,7 +63,7 @@ angular.module('scannabis')
 				url: 'users',
 				template: '<users></users>'
 			})
-			.state('scannabis.coin', {
+			.state('scannabis.coins', {
 				url: 'coins',
 				template: '<coin></coin>'
 			})
