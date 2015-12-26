@@ -52,24 +52,27 @@ angular.module('scannabis')
 				/*service.test.users = $firebaseObject(db.users).$loaded().then(function (data) {
 					localForage.setItem('users', data);
 				});*/
-				service.test.images = $firebaseObject(db.images);
-				service.test.images.$loaded().then(function (images) {
+				var dbImages = $firebaseObject(db.images);
+				dbImages.$loaded().then(function (images) {
+					service.test.images = images;
 					var localImages = {};
 					angular.forEach(images, function (image, imageKey) {
 						localImages[imageKey] = image;
 					});
 					localForage.setItem('images', localImages);
 				});
-				service.test.products = $firebaseObject(db.products);
-				service.test.products.$loaded().then(function (products) {
+				var dbProducts = $firebaseObject(db.products);
+				dbProducts.$loaded().then(function (products) {
+					service.test.products = products;
 					var localProducts = {};
 					angular.forEach(products, function (product, productKey) {
 						localProducts[productKey]=product;
 					});
 					localForage.setItem('products', localProducts);
 				});
-				service.test.users = $firebaseObject(db.users);
-				service.test.users.$loaded().then(function (users) {
+				var dbUsers = $firebaseObject(db.users);
+				dbUsers.$loaded().then(function (users) {
+					service.test.users = users;
 					var localUsers = {};
 					angular.forEach(users, function (user, userKey) {
 						localUsers[userKey] = user;
@@ -142,12 +145,6 @@ angular.module('scannabis')
 				service.methods.getData();
 				var addRef = !social ? fbRef + 'users/' + service.auth.uid + '/public/' + ref :
 				fbRef + social + '/' + ref;
-				/*if (social !== null) {
-				 var addRef = fbRef + 'users/'+ service.auth.uid +'/public/' +ref;
-				 } else {
-				 var addRef = fbRef + 'users/'+ social +'/public/' +ref;
-				 }*/
-				/*var addRef = fbRef + 'users/'+ service.auth.uid +'/public/' + ref;*/
 				var addFb = new fb(addRef);
 				var arr = $firebaseArray(addFb);
 				arr.$add(data).then(function () {
