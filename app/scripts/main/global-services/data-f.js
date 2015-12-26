@@ -40,7 +40,6 @@ angular.module('scannabis')
         // ACTUAL DEFINITION
         service.methods = {
             getImage: function(ref){
-                console.log('getting image', ref);
                 var image = $firebaseObject(db.images.child(ref));
                 return image;
             },
@@ -54,15 +53,16 @@ angular.module('scannabis')
                     service.test.products = [];
                     service.test.myProducts = [];
                     angular.forEach(users, function (user, userKey) {
+                        if(user.public && user.public.products){
+                            angular.forEach(user.public.products, function (product, productKey) {
+                                product.user = userKey;
+                                product.id = productKey;
+                                service.test.products.push(product);
+                                // console.log(service.auth);
+                                service.auth.uid === userKey  ? service.test.myProducts.push(product) : null;
 
-                        angular.forEach(user.public.products, function (product, productKey) {
-                            product.user = userKey;
-                            product.id = productKey;
-                            service.test.products.push(product);
-                            // console.log(service.auth);
-                            service.auth.uid === userKey  ? service.test.myProducts.push(product) : null;
-
-                        });
+                            });
+                        }
                     });
                     service.data = service.test;
                     localForage.setItem('products', service.test.products);
