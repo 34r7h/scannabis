@@ -51,7 +51,7 @@
                             </p>
                         </label></p>
                         </p>
-                        <p>Select one or more:</p>
+                        <p>How will you use Scannabis? Select at least one.</p>
                         <span ng-repeat="type in ['consumer', 'provider', 'courier']">
                             <button type="button" ng-click="auth.register.userType[type] =! auth.register.userType[type]" href="">
                                 <span style="font-weight: {{auth.register.userType[type] ? 800 : 400}}">{{type}}</span>
@@ -113,7 +113,87 @@
         </div>
     </div>
 </div>
-<div ng-show="$parent.data.auth.uid">
+<div ng-show="data.auth.uid" style="width: 100vw">
     <h3>logout</h3>
     <button ng-click="data.methods.logout()">Logout</button>
+    <div>{{data.test.users[data.auth.uid]}}</div>
+    <div style="width:100%;">
+        <h3>Edit your profile</h3>
+        <form name="editProfile" ng-submit="$root.secure? data.test.users[data.auth.uid].secure = $root.secure : null; data.methods.save('users', data.auth.uid, data.test.users[data.auth.uid]);" style="display: flex; width:100%; flex-wrap: wrap"><div style="display:flex; width: 100%">
+            <input type="email" ng-model="data.test.users[data.auth.uid].email" placeholder="email" required style="flex: 1 1 auto;"/>
+            <!-- TODO reset password-->
+        </div>
+            <div>
+                <p style="display:flex;flex-wrap: wrap">
+                    <input type="text" ng-model="data.test.users[$parent.data.auth.uid].firstName" placeholder="What is your first name?" required style="flex: 1 1 auto;">
+                    <input type="text" ng-model="data.test.users[$parent.data.auth.uid].lastName" placeholder="What is your last name?" required style="flex: 1 1 auto;"></p>
+                <p>
+                    <input type="tel" ng-model="data.test.users[$parent.data.auth.uid].address.mobile" placeholder="Mobile number" required>
+                <p>
+                    <label><p>Upload a new snap or scan of your government issue identification</p>
+                <uploader name="identification"></uploader>
+                <p ng-if="$root.secure.identification">
+                    <img ng-src="{{$root.secure.raw.identification}}" style="width:100%;">
+                </p>
+                </label>
+                <label><p>Upload a new snap or scan of your government issued license to participate in the Cannabis or related markets.</p>
+                    <uploader name="authorization"></uploader>
+                    <p ng-if="$root.secure.authorization">
+                        <img ng-src="{{$root.secure.raw.authorization}}" style="width:100%;">
+                    </p>
+                </label></p>
+                </p>
+                <p>How will you use Scannabis? Select at least one.</p>
+                        <span ng-repeat="type in ['consumer', 'provider', 'courier']">
+                            <button type="button" ng-click="data.test.users[$parent.data.auth.uid].userType[type] =! data.test.users[$parent.data.auth.uid].userType[type]">
+                                <span style="font-weight: {{data.test.users[data.auth.uid].userType[type] ? 800 : 400}}">{{type}}</span>
+                            </button>
+                            <span ng-show="$last">?</span>
+                        </span>
+                <div ng-if="data.test.users[$parent.data.auth.uid].userType['provider']">
+                    <p style="display:flex;">
+                        <input type="text" ng-model="data.test.users[$parent.data.auth.uid].businessName" placeholder="What is your business name?" required style="flex: 1 1 auto">
+                        <input type="tel" ng-model="data.test.users[$parent.data.auth.uid].address.phone" placeholder="Business phone number" required style="flex: 1 1 auto">
+                    </p>
+                    <p style="width: 100%">
+                        <label><p>Upload a new snap or scan of your government-issued licensing for operating a business.</p>
+                    <uploader name="licensing"></uploader>
+                    <p>
+                    <p ng-if="$root.secure.licensing">
+                        <img ng-src="{{$root.secure.raw.licensing}}" style="width:100%;">
+                    </p>
+                </div>
+
+                <div ng-if="data.test.users[$parent.data.auth.uid].userType['courier']">
+                    <div>
+                        <input type="tel" ng-model="data.test.users[$parent.data.auth.uid].address.mobile" placeholder="Mobile number" required>
+                        <p><label>
+                        <p>Upload a new picture of yourself for sending to people awaiting a delivery from you.</p>
+                        <uploader ng-if="!data.test.users[$parent.data.auth.uid].userType['provider']" name="profile"></uploader>
+                        <p ng-if="$root.secure.profile">
+                            <img ng-src="{{$root.secure.raw.profile}}" style="width:100%;">
+                        </p></label>
+                        <label><p>Upload a valid snap or scan of your government issued license to participate in the Cannabis market.</p><uploader name="authorization"></uploader>
+                            <p ng-if="$root.secure.authorization">
+                                <img ng-src="{{$root.secure.raw.authorization}}" style="width:100%;">
+                            </p></label></p>
+                    </div>
+                </div>
+                <div>
+                    <h5>Address</h5>
+                    <input type="number" ng-model="data.test.users[$parent.data.auth.uid].address.streetNumber" placeholder="Street Number"
+                           required>
+                    <input type="text" ng-model="data.test.users[$parent.data.auth.uid].address.streetName" placeholder="Street" required>
+                    <input type="text" ng-model="data.test.users[$parent.data.auth.uid].address.streetContinued"
+                           placeholder="Street Continued"
+                           required>
+                    <input type="text" ng-model="data.test.users[$parent.data.auth.uid].address.city" placeholder="City" required>
+                    <input type="text" ng-model="data.test.users[$parent.data.auth.uid].address.postal" placeholder="Postal Code" required>
+                    <input type="text" ng-model="data.test.users[$parent.data.auth.uid].address.province" placeholder="Province" required>
+                </div>
+            </div>
+            <hr>
+            <button style="width:100%;" type="submit" ng-disabled="!data.test.users[$parent.data.auth.uid].userType">Save</button>
+        </form>
+    </div>
 </div>

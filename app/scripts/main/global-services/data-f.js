@@ -117,6 +117,12 @@ angular.module('scannabis')
 					var fbObjRef = authRef.child('users');
 					var fbObj = $firebaseObject(fbObjRef).$loaded().then(function (data) {
 						obj.pass = null;
+						obj.validated = {
+							licensing: false,
+							authorization: false,
+							identification: false,
+							profile: false
+						};
 						data[authData.uid] = obj;
 						data.$save();
 						$rootScope.secure = null;
@@ -137,15 +143,15 @@ angular.module('scannabis')
 
 			},
 			save: function (type, key, data) {
-				console.log('saving data');
+				console.log('saving data', arguments);
 				var saveRef = fbRef + type;
 				console.log(saveRef);
 				var newFb = new fb(saveRef);
 				var obj = $firebaseObject(newFb).$loaded().then(function (oldData) {
-					// console.log(oldData);
+					console.log(oldData);
 					oldData[key] = data;
 					// console.log(oldData);
-					// oldData.$value = angular.copy(data);
+					oldData.$value = angular.copy(data);
 					oldData.$save();
 				});
 			},
