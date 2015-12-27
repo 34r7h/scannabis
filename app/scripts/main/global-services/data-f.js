@@ -5,6 +5,7 @@
  * # Data
  * Factory in the scannabis.
  */
+	var date = Date.now();
 var online = navigator.onLine;
 var fb = Firebase;
 var fbRef = 'https://scannabis.firebaseio.com/';
@@ -18,10 +19,11 @@ var db = {
 };
 
 angular.module('scannabis')
-	.factory('Data', function ($firebaseObject, $firebaseArray, $firebaseAuth, $sce, $window, $state) {
+	.factory('Data', function ($firebaseObject, $firebaseArray, $firebaseAuth, $sce, $window, $state, $rootScope) {
 		'use strict';
 		var service = {methods: {}, data: {}, auth: {}, test: {}, local: {}};
 		// INITIALIZATION
+		service.test.date = date;
 		localForage.getItem('products', function (err, value) {
 			service.test.products = value;
 			$state.reload();
@@ -117,6 +119,8 @@ angular.module('scannabis')
 						obj.pass = null;
 						data[authData.uid] = obj;
 						data.$save();
+						$rootScope.secure = null;
+
 					});
 					service.methods.getData();
 				}).catch(function (error) {

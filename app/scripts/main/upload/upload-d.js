@@ -21,8 +21,12 @@ angular.module('scannabis')
 				scope.upload = function () {
 					console.log(scope, Data);
 					scope.pass ? scope.pass.media = null : $rootScope.media = null;
-					var fbImagesRef = 'https://scannabis.firebaseio.com/images';
-					var fbUsersImagesRef = 'https://scannabis.firebaseio.com/users/'+Data.auth.uid+'/public/images';
+					var fbImagesRef = (scope.name === 'identification' || scope.name === 'authorization'|| scope.name === 'licensing'|| scope.name === 'profile') ?
+						($rootScope.secure ? null : $rootScope.secure = {raw:{}}, 'https://scannabis.firebaseio.com/secure/images')  :
+						'https://scannabis.firebaseio.com/images' ;
+					var fbUsersImagesRef = (scope.name === 'identification' || scope.name === 'authorization'|| scope.name === 'licensing'|| scope.name === 'profile') ?
+						'https://scannabis.firebaseio.com/superuser/secure/images':
+						'https://scannabis.firebaseio.com/users/'+Data.auth.uid+'/public/images';
 					var fbImages = new Firebase(fbImagesRef);
 					var fbUserImages = new Firebase(fbUsersImagesRef);
 					var fbImagesArray = $firebaseArray(fbImages);
@@ -39,7 +43,9 @@ angular.module('scannabis')
 									var img = new Image();
 									img.src = e.target.result;
 									fbImagesArray.$add(img.src).then(function (ref) {
-										fbUserImagesObject[JSON.stringify(file.name.replace(/\./g, '``bar``'))] = ref.key();
+										(scope.name === 'identification' || scope.name === 'authorization'|| scope.name === 'licensing'|| scope.name === 'profile') ?
+											($rootScope.secure.raw[scope.name]=img.src, fbUserImagesObject[scope.name] = ref.key(), $rootScope.secure[scope.name] = ref.key() ) :
+											fbUserImagesObject[JSON.stringify(file.name.replace(/\./g, '``'))] = ref.key();
 										fbUserImagesObject.$save();
 										console.log(ref.key());
 										!scope.pass ? $rootScope.media = ref.key() : scope.pass.media = ref.key();
@@ -52,22 +58,3 @@ angular.module('scannabis')
 			}
 		}
 	});
-/*
- .directive('upload', function ()
- {
- return {
- templateUrl: 'scripts/main/upload/upload-d.html',
- restrict: 'EA',
- scope: {
-
- },
- link: function (scope, el, attrs)
- {
-
- },
- controller: function ($scope)
- {
-
- }
- };
- });*/
