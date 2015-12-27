@@ -63,5 +63,81 @@ IMPORTANT NOTE:
 
 // endinject
 
-button { padding:1em; font-size: 1em}
-input { padding:.25em; font-size: 1.2em}
+
+$deep : rgba(77, 65, 179, 1);
+$light : rgba(148, 246, 158, 1);
+$smart : rgba(42, 148, 250, 1);
+$bold : rgba(255, 76, 148, 1);
+$true : rgba(254, 141, 102, 1);
+$white : rgba(254, 255, 253, .9);
+$black : rgba(0, 2, 1, .85);
+
+.panel {
+  border-radius: 8px;
+  padding: 8px;
+}
+.deep {color:$deep}
+.true {color:$true}
+.bold {color:$bold}
+.deep-bg {
+  background: $deep;
+  color: $white;}
+.black-bg {
+  background: $black;
+  color: $white;}
+.white-bg {
+  background: $white;
+  color: $black;}
+.smart-bg {
+  background: $smart;
+  color: $white;}
+button { padding:1em; font-size: 1em;
+  background: $smart;
+  color: rgba(255,255,255,.9);
+  border: 3px solid rgba(255,255,255, .5);}
+button.secondary {
+  background: $deep;}
+button.tertiary {
+  background: $true;}
+button.reallygood {
+  background: $bold;}
+button.think {
+  background: $smart;}
+button.snow {
+  background: $white; color: $bold; font-weight: 900}
+
+input, input:focus, textarea, textarea:focus  { padding:.25em; font-size: 1.2em;
+  background: $white;
+  border: $white;
+  box-shadow: 1px 4px 2px $deep}
+input[type=file] {
+  width:100px;
+}
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+  background-color: $light !important;
+  background-image: none;
+  color: rgba(0, 0, 0, .8) !important;
+}
+
+.footer {
+  position: fixed; bottom: 0; width: 100vw; background:rgba(106, 116, 64, .9); color: rgba(255,255,255,.8); padding: .5em;
+  background: $deep;
+}
+.header-inner {
+  display: flex; text-align: center;
+  flex-direction: row;
+  list-style: none;
+  background: $white;
+  box-shadow: 0px 0px 2px 5px $white;
+
+}
+/*.header-outer.header-inner {
+  width:100vw;  background: rgba(255,255,255, .9);
+}*/
+.header-outer {
+  border-bottom: solid $true 2px;
+  padding:1em;
+  height: 50px;
+  position:fixed;
+  z-index: 9999;
+}

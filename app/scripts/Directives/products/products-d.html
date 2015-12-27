@@ -11,7 +11,7 @@
             Product Info</h4>
         <div ng-show="show['productInfo']">
             <input type="text" ng-model="newProduct.name" placeholder="name"/>
-            <textarea type="text" ng-model="newProduct.desc" placeholder="description"></textarea>
+            <div><textarea type="text" ng-model="newProduct.desc" placeholder="description"></textarea></div>
             <div>
                 <h5>Product Category</h5>
             <span ng-repeat="category in ['flowers', 'edibles', 'extracts']">
@@ -38,7 +38,7 @@
                 <label for="{{mole}}">
 
                     <span ng-show="!show.moleAmount">
-                        <button type="button" ng-click="show.moleAmount = !show.moleAmount">
+                        <button class="secondary" type="button" ng-click="show.moleAmount = !show.moleAmount">
                             {{$parent.newProduct.mole[mole]}} {{mole}}
                         </button>
                     </span>
@@ -61,8 +61,8 @@
         <h4 ng-click="show['chooseImages'] =! show['chooseImages']">
             <b ng-bind="show['chooseImages'] ? '-' : '+'"> </b> Choose Image</h4>
         <div ng-show="show['chooseImages']">
-            <button type="button" ng-click="show.chooseImage = 'select'">Select from your image library</button>
-            <button type="button" ng-click="show.chooseImage = 'upload'">Upload a new image</button>
+            <button class="secondary" type="button" ng-click="show.chooseImage = 'select'">Select from your image library</button>
+            <button type="button" ng-click="show.chooseImage = 'upload'" class="tertiary">Upload a new image</button>
             <div ng-if="show.chooseImage === 'select'">
             <span ng-repeat="(imageKey, image) in $parent.data.test.users[data.auth.uid].public.images">
                 <img ng-click="$parent.$root.media = null; selected = 100; $root.media = image;"
@@ -101,7 +101,7 @@
                 <h4>Product Info</h4>
                 <input type="text" ng-model="product.name" placeholder="product name">
                 <br>
-                <textarea type="text" ng-model="product.desc" placeholder="product description"></textarea>
+                <div><textarea type="text" ng-model="product.desc" placeholder="product description"></textarea></div>
                 <div>
                     <h5>Product Category</h5>
             <span ng-repeat="category in ['flowers', 'edibles', 'extracts']">
@@ -128,7 +128,7 @@
                 <label for="{{mole}}">
 
                     <span ng-show="!show.moleAmount">
-                        <button type="button" ng-click="show.moleAmount = !show.moleAmount">
+                        <button class="secondary" type="button" ng-click="show.moleAmount = !show.moleAmount">
                             {{$parent.product.mole[mole]}} {{mole}}
                         </button>
                     </span>
@@ -152,8 +152,8 @@
                                                placeholder="half price"/> per half</label>
 
                 <h4>Change Image</h4>
-                <button type="button" ng-click="changeImage = 'select'">Select from your image library</button>
-                <button type="button" ng-click="changeImage = 'upload'">Upload a new image</button>
+                <button class="secondary" type="button" ng-click="changeImage = 'select'">Select from your image library</button>
+                <button type="button" ng-click="changeImage = 'upload'" class="tertiary">Upload a new image</button>
 
                 <div ng-if="changeImage === 'select'">
 
