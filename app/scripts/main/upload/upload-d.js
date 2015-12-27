@@ -15,7 +15,7 @@ angular.module('scannabis')
 				name: '@name',
 				pass: '=pass'
 			},
-			template: '<form id="{{name}}-form" novalidate><button type="button" class="tertiary"<!-- data-ng-click="upload()"-->><input class="well file-input" type="file" id="{{name}}" ng-blur="upload()" /></button></form>',
+			template: '<form id="{{name}}-form" novalidate><button type="button" class="tertiary" data-ng-click="upload()"><input class="well file-input" type="file" id="{{name}}" ng-blur="upload()" /></button></form>',
 			restrict: 'E',
 			link: function (scope, elem) {
 				scope.upload = function () {
