@@ -72,13 +72,48 @@ $true : rgba(254, 141, 102, 1);
 $white : rgba(254, 255, 253, .9);
 $black : rgba(0, 2, 1, .85);
 
+$deep-half : rgba(77, 65, 179, .5);
+$light-half : rgba(148, 246, 158, .5);
+$smart-half : rgba(42, 148, 250, .5);
+$bold-half : rgba(255, 76, 148, .5);
+$true-half : rgba(254, 141, 102, .5);
+$white-half : rgba(254, 255, 253, .45);
+$black-half : rgba(0, 2, 1, .425);
+
+a {
+  color: $deep;
+  text-decoration: none;
+}
+
 .panel {
   border-radius: 8px;
   padding: 8px;
+  .thin{
+    padding:2px
+  }
+  .top{
+    border-radius:  8px 8px 0 0;
+  }
+  .bottom{
+    border-radius: 0 0 8px 8px ;
+  }
+  .bottom-right {
+    border-radius: 0 0 8px 0 ;
+  }
+  .bottom-left {
+    border-radius: 0 0 0 8px;
+  }
 }
-.deep {color:$deep}
-.true {color:$true}
-.bold {color:$bold}
+.padding-small {padding:2px}
+.padding-large {padding:8px}
+
+
+.light {color:$light;}
+.deep {color:$deep;}
+.deep-half {color:$deep-half;}
+.true {color:$true;}
+.bold {color:$bold;}
+.white {color:$white;}
 .deep-bg {
   background: $deep;
   color: $white;}

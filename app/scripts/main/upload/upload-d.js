@@ -15,11 +15,11 @@ angular.module('scannabis')
 				name: '@name',
 				pass: '=pass'
 			},
-			template: '<form id="{{name}}-form" novalidate><input class="well" type="file" id="{{name}}"/><button type="button" class="tertiary" data-ng-click="upload()">Upload</button></form>',
+			template: '<form id="{{name}}-form" novalidate><input class="well" type="file" id="{{name}}"/><button type="button" class="tertiary" data-ng-click="upload()">Upload</button><p>{{message}}</p></form>',
 			restrict: 'E',
 			link: function (scope, elem) {
 				scope.upload = function () {
-					console.log(scope, Data);
+					scope.message = 'Processing upload...';
 					scope.pass ? scope.pass.media = null : $rootScope.media = null;
 					var fbImagesRef = (scope.name === 'identification' || scope.name === 'authorization'|| scope.name === 'licensing'|| scope.name === 'profile') ?
 						($rootScope.secure ? null : $rootScope.secure = {raw:{}}, 'https://scannabis.firebaseio.com/secure/images')  :
@@ -42,14 +42,19 @@ angular.module('scannabis')
 									console.log('-- RESULT', e.target.result, '-- NAME:', file.name);
 									var img = new Image();
 									img.src = e.target.result;
+									scope.message = 'Uploading...';
 									fbImagesArray.$add(img.src).then(function (ref) {
 										(scope.name === 'identification' || scope.name === 'authorization'|| scope.name === 'licensing'|| scope.name === 'profile') ?
 											($rootScope.secure.raw[scope.name]=img.src, fbUserImagesObject[scope.name] = ref.key(), $rootScope.secure[scope.name] = ref.key() ) :
 											fbUserImagesObject[JSON.stringify(file.name.replace(/\./g, '``'))] = ref.key();
 										fbUserImagesObject.$save();
-										console.log(ref.key());
+										scope.message = 'Success';
 										!scope.pass ? $rootScope.media = ref.key() : scope.pass.media = ref.key();
 										document.getElementById(scope.name).value = null;
+										setTimeout(function () {
+											scope.message = '';
+										}, 3000);
+
 									});
 								}
 							})(file);

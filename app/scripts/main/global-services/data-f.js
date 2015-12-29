@@ -24,27 +24,29 @@ angular.module('scannabis')
 		var service = {methods: {}, data: {}, auth: {}, test: {}, local: {}};
 		// INITIALIZATION
 		service.test.date = date;
-		localForage.getItem('products', function (err, value) {
-			service.test.products = value;
-			$state.reload();
-		});
-		localForage.getItem('images', function (err, value) {
-			service.test.images = value;
-			$state.reload();
-		});
-		localForage.getItem('users', function (err, value) {
-			service.test.users = value;
-			$state.reload();
-		});
-		localForage.getItem('auth', function (err, value) {
-			service.auth = value;
-			service.auth = $firebaseAuth(fbDb).$getAuth();
-			$state.reload();
-		});
+		function getLocal(){
+			localForage.getItem('products', function (err, value) {
+				service.test.products = value;
+				$state.reload();
+			});
+			localForage.getItem('images', function (err, value) {
+				service.test.images = value;
+				$state.reload();
+			});
+			localForage.getItem('users', function (err, value) {
+				service.test.users = value;
+				$state.reload();
+			});
+			localForage.getItem('auth', function (err, value) {
+				service.auth = value;
+				service.auth = $firebaseAuth(fbDb).$getAuth();
+				$state.reload();
+			});
+		}
 		// ACTUAL DEFINITION
 		service.methods = {
 			getImage: function (ref) {
-				var image = service.test.images[ref] || $firebaseObject(db.images.child(ref));
+				var image = service.test.images ? service.test.images[ref] : $firebaseObject(db.images.child(ref));
 				return image;
 			},
 			getEntry: function (type, ref) {
@@ -66,6 +68,9 @@ angular.module('scannabis')
 						localImages[imageKey] = image;
 					});
 					localForage.setItem('images', localImages);
+				});
+				var productsArray = $firebaseArray(db.products).$loaded().then(function (products) {
+					service.test.productsArray = products;
 				});
 				var dbProducts = $firebaseObject(db.products);
 				dbProducts.$loaded().then(function (products) {
@@ -193,6 +198,7 @@ angular.module('scannabis')
 
 
 		};
+		getLocal();
 		service.methods.getData();
 
 		return service;
